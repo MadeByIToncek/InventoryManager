@@ -61,5 +61,9 @@ namespace InventoryManager.gui
 			ManagerWindow.SwitchToWindow(new InventoryEditor(), this);
 
 		}
+
+		private void button2_Click(object sender, EventArgs e) {
+			ManagerWindow.SwitchToWindow(new LabelCreator(), this);
+		}
 	}
 }

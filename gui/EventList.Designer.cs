@@ -25,11 +25,6 @@
 		private void InitializeComponent() {
 			tableLayoutPanel1 = new TableLayoutPanel();
 			dataGridView1 = new DataGridView();
-			panel1 = new Panel();
-			ModifyInventoryButton = new Button();
-			CreateButton = new Button();
-			tableLayoutPanel2 = new TableLayoutPanel();
-			button1 = new Button();
 			eventID = new DataGridViewTextBoxColumn();
 			eventName = new DataGridViewTextBoxColumn();
 			eventDate = new DataGridViewTextBoxColumn();
@@ -38,6 +33,12 @@
 			delete = new DataGridViewButtonColumn();
 			checkin = new DataGridViewButtonColumn();
 			checkout = new DataGridViewButtonColumn();
+			panel1 = new Panel();
+			ModifyInventoryButton = new Button();
+			CreateButton = new Button();
+			tableLayoutPanel2 = new TableLayoutPanel();
+			button1 = new Button();
+			button2 = new Button();
 			tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
 			panel1.SuspendLayout();
@@ -72,70 +73,6 @@
 			dataGridView1.Size = new Size(819, 393);
 			dataGridView1.TabIndex = 0;
 			dataGridView1.CellContentClick += dataGridView1_CellContentClick;
-			// 
-			// panel1
-			// 
-			panel1.AutoSize = true;
-			panel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-			panel1.Controls.Add(ModifyInventoryButton);
-			panel1.Controls.Add(CreateButton);
-			panel1.Dock = DockStyle.Right;
-			panel1.Location = new Point(450, 402);
-			panel1.Name = "panel1";
-			panel1.Size = new Size(372, 54);
-			panel1.TabIndex = 1;
-			// 
-			// ModifyInventoryButton
-			// 
-			ModifyInventoryButton.AutoSize = true;
-			ModifyInventoryButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-			ModifyInventoryButton.Dock = DockStyle.Right;
-			ModifyInventoryButton.Location = new Point(0, 0);
-			ModifyInventoryButton.Name = "ModifyInventoryButton";
-			ModifyInventoryButton.Size = new Size(231, 54);
-			ModifyInventoryButton.TabIndex = 1;
-			ModifyInventoryButton.Text = "Modify avaliable inventory";
-			ModifyInventoryButton.UseVisualStyleBackColor = true;
-			ModifyInventoryButton.Click += ModifyInventoryButton_Click;
-			// 
-			// CreateButton
-			// 
-			CreateButton.AutoSize = true;
-			CreateButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-			CreateButton.Dock = DockStyle.Right;
-			CreateButton.Location = new Point(231, 0);
-			CreateButton.Name = "CreateButton";
-			CreateButton.Size = new Size(141, 54);
-			CreateButton.TabIndex = 0;
-			CreateButton.Text = "Add new event";
-			CreateButton.UseVisualStyleBackColor = true;
-			CreateButton.Click += CreateButton_Click;
-			// 
-			// tableLayoutPanel2
-			// 
-			tableLayoutPanel2.ColumnCount = 1;
-			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-			tableLayoutPanel2.Controls.Add(button1, 0, 1);
-			tableLayoutPanel2.Dock = DockStyle.Fill;
-			tableLayoutPanel2.Location = new Point(0, 0);
-			tableLayoutPanel2.Name = "tableLayoutPanel2";
-			tableLayoutPanel2.RowCount = 2;
-			tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
-			tableLayoutPanel2.Size = new Size(1025, 450);
-			tableLayoutPanel2.TabIndex = 2;
-			// 
-			// button1
-			// 
-			button1.AutoSize = true;
-			button1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-			button1.Dock = DockStyle.Right;
-			button1.Location = new Point(881, 393);
-			button1.Name = "button1";
-			button1.Size = new Size(141, 54);
-			button1.TabIndex = 1;
-			button1.Text = "Add new event";
-			button1.UseVisualStyleBackColor = true;
 			// 
 			// eventID
 			// 
@@ -217,6 +154,85 @@
 			checkout.UseColumnTextForButtonValue = true;
 			checkout.Width = 99;
 			// 
+			// panel1
+			// 
+			panel1.AutoSize = true;
+			panel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			panel1.Controls.Add(button2);
+			panel1.Controls.Add(ModifyInventoryButton);
+			panel1.Controls.Add(CreateButton);
+			panel1.Dock = DockStyle.Right;
+			panel1.Location = new Point(397, 402);
+			panel1.Name = "panel1";
+			panel1.Size = new Size(425, 54);
+			panel1.TabIndex = 1;
+			// 
+			// ModifyInventoryButton
+			// 
+			ModifyInventoryButton.AutoSize = true;
+			ModifyInventoryButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			ModifyInventoryButton.Dock = DockStyle.Right;
+			ModifyInventoryButton.Location = new Point(53, 0);
+			ModifyInventoryButton.Name = "ModifyInventoryButton";
+			ModifyInventoryButton.Size = new Size(231, 54);
+			ModifyInventoryButton.TabIndex = 1;
+			ModifyInventoryButton.Text = "Modify avaliable inventory";
+			ModifyInventoryButton.UseVisualStyleBackColor = true;
+			ModifyInventoryButton.Click += ModifyInventoryButton_Click;
+			// 
+			// CreateButton
+			// 
+			CreateButton.AutoSize = true;
+			CreateButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			CreateButton.Dock = DockStyle.Right;
+			CreateButton.Location = new Point(284, 0);
+			CreateButton.Name = "CreateButton";
+			CreateButton.Size = new Size(141, 54);
+			CreateButton.TabIndex = 0;
+			CreateButton.Text = "Add new event";
+			CreateButton.UseVisualStyleBackColor = true;
+			CreateButton.Click += CreateButton_Click;
+			// 
+			// tableLayoutPanel2
+			// 
+			tableLayoutPanel2.ColumnCount = 1;
+			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+			tableLayoutPanel2.Controls.Add(button1, 0, 1);
+			tableLayoutPanel2.Dock = DockStyle.Fill;
+			tableLayoutPanel2.Location = new Point(0, 0);
+			tableLayoutPanel2.Name = "tableLayoutPanel2";
+			tableLayoutPanel2.RowCount = 2;
+			tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+			tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
+			tableLayoutPanel2.Size = new Size(1025, 450);
+			tableLayoutPanel2.TabIndex = 2;
+			// 
+			// button1
+			// 
+			button1.AutoSize = true;
+			button1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			button1.Dock = DockStyle.Right;
+			button1.Location = new Point(881, 393);
+			button1.Name = "button1";
+			button1.Size = new Size(141, 54);
+			button1.TabIndex = 1;
+			button1.Text = "Add new event";
+			button1.UseVisualStyleBackColor = true;
+			// 
+			// button2
+			// 
+			button2.AutoSize = true;
+			button2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			button2.Dock = DockStyle.Right;
+			button2.Font = new Font("Segoe UI", 11F);
+			button2.Location = new Point(0, 0);
+			button2.Name = "button2";
+			button2.Size = new Size(53, 54);
+			button2.TabIndex = 2;
+			button2.Text = "🖨";
+			button2.UseVisualStyleBackColor = true;
+			button2.Click += button2_Click;
+			// 
 			// EventList
 			// 
 			AutoScaleDimensions = new SizeF(10F, 25F);
@@ -253,5 +269,6 @@
 		private DataGridViewButtonColumn delete;
 		private DataGridViewButtonColumn checkin;
 		private DataGridViewButtonColumn checkout;
+		private Button button2;
 	}
 }
