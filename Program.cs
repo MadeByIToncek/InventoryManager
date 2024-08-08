@@ -93,8 +93,8 @@ namespace InventoryManager {
 			ShowInTaskbar = false;
 			Visible = false;
 
-			var initWindow = new LabelCreator();
-			//var initWindow = new EventList();
+			//var initWindow = new LabelCreator();
+			var initWindow = new EventList();
 			runningWindow = initWindow;
 			initWindow.Show();
 		}
