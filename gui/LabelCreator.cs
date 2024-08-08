@@ -16,24 +16,24 @@ namespace InventoryManager.gui {
 
 		public LabelCreator() {
 			InitializeComponent();
-			print_Click(null, null);
 
 			FormClosing += (s, e) => {
 				if (!expectedExit) {
 					expectedExit = true;
-					ManagerWindow.SwitchToWindow(new EventList(),this);
+					ManagerWindow.SwitchToWindow(new EventList(), this);
 				}
 			};
 		}
 
 		private void print_Click(object sender, EventArgs e) {
+			Hide();
 			PrintDialog pdialog = new PrintDialog();
 			pdialog.ShowDialog();
 			PrintDocument pd = new PrintDocument();
 			pd.PrinterSettings = pdialog.PrinterSettings;
 			pd.PrintPage += new PrintPageEventHandler(pd_PrintPage);
 			pd.Print();
-
+			Close();
 		}
 
 		// The PrintPage event is raised for each page to be printed.

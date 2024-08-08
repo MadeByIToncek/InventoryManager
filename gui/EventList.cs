@@ -63,6 +63,7 @@ namespace InventoryManager.gui
 		}
 
 		private void button2_Click(object sender, EventArgs e) {
+			expectedExit = true;
 			ManagerWindow.SwitchToWindow(new LabelCreator(), this);
 		}
 	}
