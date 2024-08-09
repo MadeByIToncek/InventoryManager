@@ -24,6 +24,7 @@ namespace InventoryManager.gui {
 				await UpdateListSafe();
 			};
 
+
 			dataGridView1.UserDeletingRow += async (o, e) => {
 				try {
 					await Program.db.DeleteItemById((int)dataGridView1.Rows[e.Row.Index].Cells[0].Value);
