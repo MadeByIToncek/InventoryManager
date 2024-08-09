@@ -19,16 +19,15 @@ namespace InventoryManager.gui {
 
 			dataGridView1.CellEndEdit += async (o, e) => {
 				try {
-					await Program.db.UpdateItemById((int)dataGridView1.Rows[e.RowIndex].Cells[0].Value, (string)dataGridView1.Rows[e.RowIndex].Cells[1].Value, Guid.Parse((string)dataGridView1.Rows[e.RowIndex].Cells[2].Value));
-					await UpdateList();
-				} catch (Exception) {
-				}
+					await Program.db.UpdateItemById((int)dataGridView1.Rows[e.RowIndex].Cells[0].Value, (string)dataGridView1.Rows[e.RowIndex].Cells[1].Value, (Guid)dataGridView1.Rows[e.RowIndex].Cells[2].Value);
+				} catch (Exception) { }
+				await UpdateListSafe();
 			};
 
 			dataGridView1.UserDeletingRow += async (o, e) => {
 				try {
 					await Program.db.DeleteItemById((int)dataGridView1.Rows[e.Row.Index].Cells[0].Value);
-					await UpdateList();
+					await UpdateListSafe();
 				} catch (Exception) {
 				}
 			};
@@ -81,7 +80,7 @@ namespace InventoryManager.gui {
 
 		public async Task UpdateList() {
 			Enabled = false;
-			dataGridView1.Rows.Clear();
+			dataGridView1.Invoke(new MethodInvoker(dataGridView1.Rows.Clear));
 			foreach (var item in (await Program.db.ListItem()).OrderBy(x=>x.Id)){
 				dataGridView1.Rows.Add(item.Id, item.Name, item.Code);
 			}

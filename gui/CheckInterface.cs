@@ -80,8 +80,7 @@ namespace InventoryManager.gui {
 
 		private async Task UpdateItemList() {
 			dataGridView1.Rows.Clear();
-			foreach (var item in await Program.db.ListUsedItemsForEvent(eventID)) {
-				if (item.State == State.Unset) continue;
+			foreach (var item in (await Program.db.ListUsedItemsForEvent(eventID)).OrderBy(x=>x.Item.Name).OrderBy(x=>x.State)) {
 				int id = dataGridView1.Rows.Add(item.Item.Code, item.Item.Name, item.State);
 				dataGridView1.Rows[id].DefaultCellStyle.BackColor = StateHelper.Background(item.State, isCheckIn);
 				dataGridView1.Rows[id].DefaultCellStyle.ForeColor = StateHelper.Foreground(item.State);

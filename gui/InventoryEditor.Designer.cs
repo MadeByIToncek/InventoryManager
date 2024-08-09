@@ -63,6 +63,7 @@
 			dataGridView1.Columns.AddRange(new DataGridViewColumn[] { ItemID, ItemName, ItemCode });
 			dataGridView1.Dock = DockStyle.Fill;
 			dataGridView1.Location = new Point(0, 0);
+			dataGridView1.MultiSelect = false;
 			dataGridView1.Name = "dataGridView1";
 			dataGridView1.RowHeadersWidth = 62;
 			dataGridView1.Size = new Size(741, 940);
