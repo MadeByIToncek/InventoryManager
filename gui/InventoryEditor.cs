@@ -18,18 +18,27 @@ namespace InventoryManager.gui {
 			InitializeComponent();
 
 			dataGridView1.CellEndEdit += async (o, e) => {
-				await Program.db.UpdateItemById((int)dataGridView1.Rows[e.RowIndex].Cells[0].Value, (string)dataGridView1.Rows[e.RowIndex].Cells[1].Value, (string)dataGridView1.Rows[e.RowIndex].Cells[2].Value);
-				await UpdateList();
+				try {
+					await Program.db.UpdateItemById((int)dataGridView1.Rows[e.RowIndex].Cells[0].Value, (string)dataGridView1.Rows[e.RowIndex].Cells[1].Value, Guid.Parse((string)dataGridView1.Rows[e.RowIndex].Cells[2].Value));
+					await UpdateList();
+				} catch (Exception) {
+				}
 			};
 
 			dataGridView1.UserDeletingRow += async (o, e) => {
-				await Program.db.DeleteItemById((int) dataGridView1.Rows[e.Row.Index].Cells[0].Value);
-				await UpdateList();
+				try {
+					await Program.db.DeleteItemById((int)dataGridView1.Rows[e.Row.Index].Cells[0].Value);
+					await UpdateList();
+				} catch (Exception) {
+				}
 			};
 
 			dataGridView1.UserAddedRow += async (o, e) => {
-				int id = await Program.db.CreateEmptyItem();
-				dataGridView1.Rows[(e.Row.Index - 1)].Cells[0].Value = id;
+				try {
+					int id = await Program.db.CreateEmptyItem();
+					dataGridView1.Rows[(e.Row.Index - 1)].Cells[0].Value = id;
+				} catch (Exception) {
+				}
 			};
 
 
@@ -37,11 +46,12 @@ namespace InventoryManager.gui {
 				DrawingControl.SuspendDrawing(this);
 				server = new(async request => {
 					SetLog(request.content);
-					if(dataGridView1.SelectedCells.Count == 1 && dataGridView1.SelectedCells[0].ColumnIndex == 2) {
+					if (dataGridView1.SelectedCells.Count == 1 && dataGridView1.SelectedCells[0].ColumnIndex == 2) {
 						DataGridViewCell cell = dataGridView1.SelectedCells[0];
 						if (cell != null) {
 							SetCell(cell.RowIndex, cell.ColumnIndex, request.content);
-							await Program.db.UpdateItemById((int)dataGridView1.Rows[cell.RowIndex].Cells[0].Value, (string)dataGridView1.Rows[cell.RowIndex].Cells[1].Value, (string)dataGridView1.Rows[cell.RowIndex].Cells[2].Value);
+							await Program.db.UpdateItemById((int)dataGridView1.Rows[cell.RowIndex].Cells[0].Value, (string)dataGridView1.Rows[cell.RowIndex].Cells[1].Value, Guid.Parse((string)dataGridView1.Rows[cell.RowIndex].Cells[2].Value));
+							await UpdateListSafe();
 						}
 					}
 				});
@@ -52,12 +62,18 @@ namespace InventoryManager.gui {
 			FormClosing += (s, e) => {
 				if (!expectedExit) {
 					expectedExit = true;
-					ManagerWindow.Exit();
+					ManagerWindow.SwitchToWindow(new EventList(), this);
 				}
 			};
 		}
 
-		public async Task UpdateList() { 
+		public async Task UpdateListSafe() {
+			if (dataGridView1.InvokeRequired) {
+				await dataGridView1.Invoke(UpdateList);
+			} else await UpdateList();
+		}
+
+		public async Task UpdateList() {
 			DrawingControl.SuspendDrawing(this);
 			dataGridView1.Rows.Clear();
 			foreach (var item in await Program.db.ListItem()) {
@@ -69,7 +85,6 @@ namespace InventoryManager.gui {
 
 		public void SetLog(string msg) {
 			if (textBox1.InvokeRequired) {
-				// Call this same method but append THREAD2 to the text
 				void safeWrite() { SetLog(msg); }
 				textBox1.Invoke(safeWrite);
 			} else textBox1.Text = msg;
@@ -77,14 +92,9 @@ namespace InventoryManager.gui {
 
 		public void SetCell(int row, int col, string msg) {
 			if (dataGridView1.InvokeRequired) {
-				// Call this same method but append THREAD2 to the text
-				void safeWrite() { SetCell(row,col,msg); }
+				void safeWrite() { SetCell(row, col, msg); }
 				dataGridView1.Invoke(safeWrite);
 			} else dataGridView1.Rows[row].Cells[col].Value = msg;
-		}
-
-		private async void AddNewItemButton_Click(object sender, EventArgs e) {
-
 		}
 	}
 }

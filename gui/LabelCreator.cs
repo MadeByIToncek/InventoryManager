@@ -57,7 +57,7 @@ namespace InventoryManager.gui {
 
 				int row = (int)(Math.Floor(i / 4d));
 				int column = i % 4;
-				float xRatioOffset = (column * 5.25f / 21f) + .25f / 21f;
+				float xRatioOffset = (column * 5.25f / 21f) + .25f / 21f - .25f/21f;
 				float yRatioOffset = (row * 2.122f / 29.7f) + 1.2f / 29.7f;
 				float xRatioSize = 70f / ev.PageBounds.Width;
 				float yRatioSize = 70f / ev.PageBounds.Height;
@@ -65,7 +65,7 @@ namespace InventoryManager.gui {
 				float xstep = xRatioSize / matrix.Width;
 				float ystep = yRatioSize / matrix.Height;
 				g.DrawString("IToncek", new Font("VCR OSD Mono", 16), Brushes.Black, new PointF((xRatioOffset + (2.1f / 21f)) * ev.PageBounds.Width, (yRatioOffset + (.5f / 29.7f)) * ev.PageBounds.Height));
-				g.DrawString("+420 773 277 452", new Font("VCR OSD Mono", 8), Brushes.Black, new PointF((xRatioOffset + (2.1f / 21f)) * ev.PageBounds.Width, (yRatioOffset + (1.2f / 29.7f)) * ev.PageBounds.Height));
+				g.DrawString("+420773277452", new Font("VCR OSD Mono", 8), Brushes.Black, new PointF((xRatioOffset + (2.1f / 21f)) * ev.PageBounds.Width, (yRatioOffset + (1.2f / 29.7f)) * ev.PageBounds.Height));
 
 				for (int x = 0; x < matrix.Width; x++) {
 					for (int y = 0; y < matrix.Height; y++) {

@@ -1,3 +1,5 @@
+using System.Windows.Forms;
+
 namespace InventoryManager.gui
 	{
 	public partial class EventList : Form {
@@ -53,7 +55,7 @@ namespace InventoryManager.gui
 
 		private async void CreateButton_Click(object sender, EventArgs e) {
 			await Program.db.CreateEmptyEvent();
-			UpdateEvents();
+			await UpdateEvents();
 		}
 
 		private void ModifyInventoryButton_Click(object sender, EventArgs e) {
@@ -65,6 +67,49 @@ namespace InventoryManager.gui
 		private void button2_Click(object sender, EventArgs e) {
 			expectedExit = true;
 			ManagerWindow.SwitchToWindow(new LabelCreator(), this);
+		}
+
+		private async void ImportDatabase_Click(object sender, EventArgs e) {
+			OpenFileDialog dialog = new() {
+				Filter = "Database files (*.db)|*.db",
+				RestoreDirectory = true,
+				CheckFileExists = true,
+				CheckPathExists = true,
+				ReadOnlyChecked = true
+			};
+			if (dialog.ShowDialog().Equals(DialogResult.OK)) {
+				Enabled = false;
+				await Program.db.Close();
+				Program.db = null;
+				File.Delete(await Program.GetDatabasePath());
+				File.Copy(dialog.FileName, await Program.GetDatabasePath());
+				Program.db = await Program.LoadDatabaseConfig();
+				await UpdateEvents();
+				Enabled = true;
+			}
+		}
+
+		private async void ExportDatabase_Click(object sender, EventArgs e) {
+			SaveFileDialog dialog = new() {
+				AddExtension = true,
+				DefaultExt = ".db",
+				Filter = "Database files (*.db)|*.db",
+				CheckPathExists = true,
+				CheckWriteAccess = true,
+				RestoreDirectory = true,
+				AddToRecent = true,
+				OverwritePrompt = true,
+			};
+            if (dialog.ShowDialog().Equals(DialogResult.OK)) {
+				Enabled = false;
+				await Program.db.Close();
+				Program.db = null;
+				if(File.Exists(dialog.FileName)) File.Delete(dialog.FileName);
+				File.Copy(await Program.GetDatabasePath(), dialog.FileName);
+				Program.db = await Program.LoadDatabaseConfig();
+				await UpdateEvents();
+				Enabled = true;
+			};	
 		}
 	}
 }

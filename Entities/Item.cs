@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace InventoryManager.Entities {
 	public class Item {
-		public virtual int Id { get; protected set; }
+		public virtual int Id { get; set; }
 		public virtual string Name { get; set; }
-		public virtual string Code { get; set; }
+		public virtual Guid Code { get; set; }
 	}
 }

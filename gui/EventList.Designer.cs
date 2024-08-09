@@ -34,11 +34,13 @@
 			checkin = new DataGridViewButtonColumn();
 			checkout = new DataGridViewButtonColumn();
 			panel1 = new Panel();
+			ExportDatabase = new Button();
+			ImportDatabase = new Button();
+			button2 = new Button();
 			ModifyInventoryButton = new Button();
 			CreateButton = new Button();
 			tableLayoutPanel2 = new TableLayoutPanel();
 			button1 = new Button();
-			button2 = new Button();
 			tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
 			panel1.SuspendLayout();
@@ -158,21 +160,65 @@
 			// 
 			panel1.AutoSize = true;
 			panel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			panel1.Controls.Add(ExportDatabase);
+			panel1.Controls.Add(ImportDatabase);
 			panel1.Controls.Add(button2);
 			panel1.Controls.Add(ModifyInventoryButton);
 			panel1.Controls.Add(CreateButton);
 			panel1.Dock = DockStyle.Right;
-			panel1.Location = new Point(397, 402);
+			panel1.Location = new Point(292, 402);
 			panel1.Name = "panel1";
-			panel1.Size = new Size(425, 54);
+			panel1.Size = new Size(530, 54);
 			panel1.TabIndex = 1;
+			// 
+			// ExportDatabase
+			// 
+			ExportDatabase.AutoSize = true;
+			ExportDatabase.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			ExportDatabase.Dock = DockStyle.Right;
+			ExportDatabase.Font = new Font("Segoe UI Emoji", 11F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			ExportDatabase.Location = new Point(0, 0);
+			ExportDatabase.Name = "ExportDatabase";
+			ExportDatabase.Size = new Size(52, 54);
+			ExportDatabase.TabIndex = 4;
+			ExportDatabase.Text = "💾";
+			ExportDatabase.UseVisualStyleBackColor = true;
+			ExportDatabase.Click += ExportDatabase_Click;
+			// 
+			// ImportDatabase
+			// 
+			ImportDatabase.AutoSize = true;
+			ImportDatabase.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			ImportDatabase.Dock = DockStyle.Right;
+			ImportDatabase.Font = new Font("Segoe UI", 11F);
+			ImportDatabase.Location = new Point(52, 0);
+			ImportDatabase.Name = "ImportDatabase";
+			ImportDatabase.Size = new Size(53, 54);
+			ImportDatabase.TabIndex = 3;
+			ImportDatabase.Text = "📂";
+			ImportDatabase.UseVisualStyleBackColor = true;
+			ImportDatabase.Click += ImportDatabase_Click;
+			// 
+			// button2
+			// 
+			button2.AutoSize = true;
+			button2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			button2.Dock = DockStyle.Right;
+			button2.Font = new Font("Segoe UI", 11F);
+			button2.Location = new Point(105, 0);
+			button2.Name = "button2";
+			button2.Size = new Size(53, 54);
+			button2.TabIndex = 2;
+			button2.Text = "🖨";
+			button2.UseVisualStyleBackColor = true;
+			button2.Click += button2_Click;
 			// 
 			// ModifyInventoryButton
 			// 
 			ModifyInventoryButton.AutoSize = true;
 			ModifyInventoryButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
 			ModifyInventoryButton.Dock = DockStyle.Right;
-			ModifyInventoryButton.Location = new Point(53, 0);
+			ModifyInventoryButton.Location = new Point(158, 0);
 			ModifyInventoryButton.Name = "ModifyInventoryButton";
 			ModifyInventoryButton.Size = new Size(231, 54);
 			ModifyInventoryButton.TabIndex = 1;
@@ -185,7 +231,7 @@
 			CreateButton.AutoSize = true;
 			CreateButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
 			CreateButton.Dock = DockStyle.Right;
-			CreateButton.Location = new Point(284, 0);
+			CreateButton.Location = new Point(389, 0);
 			CreateButton.Name = "CreateButton";
 			CreateButton.Size = new Size(141, 54);
 			CreateButton.TabIndex = 0;
@@ -218,20 +264,6 @@
 			button1.TabIndex = 1;
 			button1.Text = "Add new event";
 			button1.UseVisualStyleBackColor = true;
-			// 
-			// button2
-			// 
-			button2.AutoSize = true;
-			button2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-			button2.Dock = DockStyle.Right;
-			button2.Font = new Font("Segoe UI", 11F);
-			button2.Location = new Point(0, 0);
-			button2.Name = "button2";
-			button2.Size = new Size(53, 54);
-			button2.TabIndex = 2;
-			button2.Text = "🖨";
-			button2.UseVisualStyleBackColor = true;
-			button2.Click += button2_Click;
 			// 
 			// EventList
 			// 
@@ -270,5 +302,7 @@
 		private DataGridViewButtonColumn checkin;
 		private DataGridViewButtonColumn checkout;
 		private Button button2;
+		private Button ExportDatabase;
+		private Button ImportDatabase;
 	}
 }

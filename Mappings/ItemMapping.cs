@@ -11,7 +11,7 @@ namespace InventoryManager.Mappings {
 		public ItemMapping() { 
 			Id(x=>x.Id);
 			Map(x=>x.Name);
-			Map(x=>x.Code);
+			Map(x => x.Code);
 		}
 	}
 }

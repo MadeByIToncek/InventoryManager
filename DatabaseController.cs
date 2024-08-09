@@ -1,59 +1,52 @@
 ﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using InventoryManager.Entities;
-using Microsoft.Extensions.Logging;
-using MySqlX.XDevAPI;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using NHibernate.Transform;
-using NHibernate.Util;
-using System.Data.Entity;
 
 namespace InventoryManager {
-	public class DatabaseController
-    {
-        private readonly ISessionFactory sf;
+	public class DatabaseController {
+		private readonly ISessionFactory sf;
 
-        public DatabaseController(string server, int port, string database, string user, string password)
-        {
-            Program.SplashScreen?.SetCurrentProgressMessage("DB", "Connecting");
-            
-            sf = Fluently.Configure()
-                .Database(MySQLConfiguration.Standard.ConnectionString(c =>
-                    c.Server(server)
-                     .Port(port)
-                     .Database(database)
-                     .Username(user)
-                     .Password(password)))
-                .Mappings(m =>
-                     m.FluentMappings.AddFromAssemblyOf<Program>())
-                .ExposeConfiguration(TreatConfiguration)
-                .BuildSessionFactory();
+		public DatabaseController(string path) {
+			Program.SplashScreen?.SetCurrentProgressMessage("DB", "Connecting");
 
-            Program.SplashScreen?.SetCurrentProgressMessage("DB", "Connected");
+			sf = Fluently.Configure()
+				.Database(SQLiteConfiguration.Standard.UsingFile(path))
+				.Mappings(m => m.FluentMappings.AddFromAssemblyOf<Program>())
+				.ExposeConfiguration(TreatConfiguration)
+				.BuildSessionFactory();
 
-        }
+			Program.SplashScreen?.SetCurrentProgressMessage("DB", "Connected");
 
-        private static void TreatConfiguration(Configuration configuration)
-        {
-            Program.SplashScreen?.SetCurrentProgressMessage("DB Migrations", "Migrating table layout");
-            var update = new SchemaUpdate(configuration);
-            update.Execute(false, true);
-            Program.SplashScreen?.SetCurrentProgressMessage("DB Migrations", "Table migration finished");
-        }
+		}
+
+		private static async void TreatConfiguration(Configuration configuration) {
+			Program.SplashScreen?.SetCurrentProgressMessage("DB Migrations", "Migrating table layout");
+			var update = new SchemaUpdate(configuration);
+			await update.ExecuteAsync(false, true);
+			Program.SplashScreen?.SetCurrentProgressMessage("DB Migrations", "Table migration finished");
+		}
+
+		internal async Task Close() {
+			await sf.EvictQueriesAsync();
+			await sf.CloseAsync();
+			sf.Dispose();
+		}
 
 		internal async Task CreateEmptyEvent() {
-            await SaveOrUpdateEvent(new Event() {
-                Name = "",
-                Date = 0
-            });
+			await SaveOrUpdateEvent(new Event() {
+				Name = "",
+				Date = 0
+			});
 		}
 
 		internal async Task<int> CreateEmptyItem() {
 			return await SaveOrUpdateItem(new Item() {
 				Name = "",
-				Code = "",
+				Code = Guid.Empty,
 			});
 		}
 
@@ -87,8 +80,8 @@ namespace InventoryManager {
 
 		internal async Task<IList<Event>> ListEvents() {
 			using (ISession s = sf.OpenSession()) {
-                return await s.QueryOver<Event>().ListAsync();
-            };
+				return await s.QueryOver<Event>().ListAsync();
+			};
 		}
 
 		internal async Task<IList<Item>> ListItem() {
@@ -104,7 +97,7 @@ namespace InventoryManager {
 			await trans.CommitAsync();
 		}
 
-		internal async Task UpdateItemById(int id, string name, string uuid) {
+		internal async Task UpdateItemById(int id, string name, Guid uuid) {
 			using ISession s = sf.OpenSession();
 			ITransaction trans = s.BeginTransaction();
 			var query = await s.QueryOver<Item>()

@@ -1,7 +1,5 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Org.BouncyCastle.Asn1.Ocsp;
 using System.Text.Json;
 
 namespace InventoryManager {
