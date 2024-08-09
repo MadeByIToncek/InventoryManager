@@ -23,6 +23,7 @@
 		///  the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EventList));
 			tableLayoutPanel1 = new TableLayoutPanel();
 			dataGridView1 = new DataGridView();
 			eventID = new DataGridViewTextBoxColumn();
@@ -271,6 +272,7 @@
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(825, 459);
 			Controls.Add(tableLayoutPanel1);
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "EventList";
 			StartPosition = FormStartPosition.CenterParent;
 			Text = "InventoryManager";

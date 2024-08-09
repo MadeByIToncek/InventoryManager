@@ -23,6 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EventEditor));
 			name = new TextBox();
 			groupBox1 = new GroupBox();
 			groupBox2 = new GroupBox();
@@ -96,6 +97,7 @@
 			Controls.Add(groupBox2);
 			Controls.Add(groupBox1);
 			FormBorderStyle = FormBorderStyle.FixedSingle;
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			MaximumSize = new Size(613, 280);
 			MinimumSize = new Size(613, 280);
 			Name = "EventEditor";

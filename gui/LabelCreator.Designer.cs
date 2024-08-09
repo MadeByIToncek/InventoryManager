@@ -23,6 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LabelCreator));
 			print = new Button();
 			labelNO = new NumericUpDown();
 			ToBePrinted = new Label();
@@ -134,6 +135,7 @@
 			Controls.Add(tableLayoutPanel1);
 			Controls.Add(print);
 			FormBorderStyle = FormBorderStyle.Fixed3D;
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			MaximumSize = new Size(568, 185);
 			MinimumSize = new Size(568, 185);
 			Name = "LabelCreator";

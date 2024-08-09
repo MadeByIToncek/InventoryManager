@@ -26,6 +26,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SplashInterface));
 			label1 = new Label();
 			ver = new Label();
 			logDisplay = new Label();
@@ -98,6 +99,7 @@
 			Controls.Add(ver);
 			Controls.Add(label1);
 			FormBorderStyle = FormBorderStyle.None;
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "SplashInterface";
 			ShowInTaskbar = false;
 			StartPosition = FormStartPosition.CenterParent;

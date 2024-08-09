@@ -7,7 +7,7 @@ namespace InventoryManager.gui
 		public EventList() {
 			InitializeComponent();
 
-			Load += async (s, e) => {
+			Shown += async (s, e) => {
 				await UpdateEvents();
 			};
 
@@ -20,12 +20,12 @@ namespace InventoryManager.gui
 		}
 
 		private async Task UpdateEvents() {
-			DrawingControl.SuspendDrawing(this);
+			Enabled = false;
 			dataGridView1.Rows.Clear();
 			foreach (var @event in await Program.db.ListEvents()) {
-				dataGridView1.Rows.Add(@event.Id, @event.Name, DateOnly.FromDayNumber(@event.Date).ToString(), @event.Items.Count);
+				dataGridView1.Rows.Add(@event.Id, @event.Name, DateOnly.FromDayNumber(@event.Date).ToString(), @event.Items.Where(x => x.State == Entities.State.CheckedIn).Count());
 			}
-			DrawingControl.ResumeDrawing(this);
+			Enabled = true;
 		}
 
 		private async void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) {
@@ -44,13 +44,25 @@ namespace InventoryManager.gui
 						}
 						break;
 					case 6:
+						CheckIn(eventID);
 						break;
 					case 7:
+						CheckOut(eventID);
 						break;
 					default:
 						break;
 				}
 			}
+		}
+
+		private void CheckOut(int eventID) {
+			expectedExit = true;
+			ManagerWindow.SwitchToWindow(new CheckInterface(false, eventID), this);
+		}
+
+		private void CheckIn(int eventID) {
+			expectedExit = true;
+			ManagerWindow.SwitchToWindow(new CheckInterface(true, eventID),this);
 		}
 
 		private async void CreateButton_Click(object sender, EventArgs e) {

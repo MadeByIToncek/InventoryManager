@@ -15,18 +15,17 @@ namespace InventoryManager.gui {
 		bool expectedExit = false;
 		public EventEditor(int eventID) {
 			InitializeComponent();
-			Load += async (e, a) => {
-				DrawingControl.SuspendDrawing(this);
+			Shown += async (e, a) => {
+				Enabled = false;
 				@event = await Program.db.GetEventById(eventID);
 				name.Text = @event.Name;
 				dateTimePicker1.Value = (@event.Date == 0 ? DateOnly.FromDateTime(DateTime.Now) : DateOnly.FromDayNumber(@event.Date)).ToDateTime(TimeOnly.MinValue);
-				DrawingControl.ResumeDrawing(this);
+				Enabled = true;
 			};
 
 			FormClosing += (s, e) => {
 				if (!expectedExit) {
-					expectedExit = true;
-					ManagerWindow.Exit();
+					ModifyButton_Click(null, null);
 				}
 			};
 		}

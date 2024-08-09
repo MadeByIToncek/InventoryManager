@@ -23,6 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InventoryEditor));
 			textBox1 = new TextBox();
 			groupBox1 = new GroupBox();
 			dataGridView1 = new DataGridView();
@@ -119,6 +120,7 @@
 			ClientSize = new Size(741, 1024);
 			Controls.Add(dataGridView1);
 			Controls.Add(groupBox1);
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "InventoryEditor";
 			Text = "InventoryEditor";
 			groupBox1.ResumeLayout(false);

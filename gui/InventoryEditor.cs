@@ -42,8 +42,9 @@ namespace InventoryManager.gui {
 			};
 
 
-			Load += async (e, a) => {
-				DrawingControl.SuspendDrawing(this);
+			Shown += async (e, a) => {
+				await UpdateList();
+				Enabled = false;
 				server = new(async request => {
 					SetLog(request.content);
 					if (dataGridView1.SelectedCells.Count == 1 && dataGridView1.SelectedCells[0].ColumnIndex == 2) {
@@ -55,11 +56,11 @@ namespace InventoryManager.gui {
 						}
 					}
 				});
-				DrawingControl.ResumeDrawing(this);
-				await UpdateList();
+				Enabled = true;
 			};
 
 			FormClosing += (s, e) => {
+				server?.close();
 				if (!expectedExit) {
 					expectedExit = true;
 					ManagerWindow.SwitchToWindow(new EventList(), this);
@@ -74,13 +75,12 @@ namespace InventoryManager.gui {
 		}
 
 		public async Task UpdateList() {
-			DrawingControl.SuspendDrawing(this);
+			Enabled = false;
 			dataGridView1.Rows.Clear();
 			foreach (var item in await Program.db.ListItem()) {
 				dataGridView1.Rows.Add(item.Id, item.Name, item.Code);
 			}
-
-			DrawingControl.ResumeDrawing(this);
+			Enabled = true;
 		}
 
 		public void SetLog(string msg) {

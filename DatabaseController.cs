@@ -1,6 +1,7 @@
 ﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using InventoryManager.Entities;
+using Microsoft.Extensions.Logging;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
@@ -30,6 +31,20 @@ namespace InventoryManager {
 			Program.SplashScreen?.SetCurrentProgressMessage("DB Migrations", "Table migration finished");
 		}
 
+		internal async Task ChangeUsedItemStateById(int eventID, Guid itemCode, State state) {
+			using var s = sf.OpenSession();
+			ITransaction trans = s.BeginTransaction();
+			Item item = await s.QueryOver<Item>()
+				.Where(i => (i.Code == itemCode))
+				.TransformUsing(new DistinctRootEntityResultTransformer()).SingleOrDefaultAsync<Item>();
+			UsedItem query = await s.QueryOver<UsedItem>()
+				.Where(i => (i.Item.Id == item.Id) && (i.Event.Id == eventID))
+				.TransformUsing(new DistinctRootEntityResultTransformer()).SingleOrDefaultAsync<UsedItem>();
+			query.State = state;
+			await s.SaveOrUpdateAsync(query);
+			await trans.CommitAsync();
+		}
+
 		internal async Task Close() {
 			await sf.EvictQueriesAsync();
 			await sf.CloseAsync();
@@ -48,6 +63,26 @@ namespace InventoryManager {
 				Name = "",
 				Code = Guid.Empty,
 			});
+		}
+
+		internal async Task CreateNewUsedItem(int itemId, int eventId) {
+			using ISession s = sf.OpenSession();
+			ITransaction trans = s.BeginTransaction();
+			Item item = await s.QueryOver<Item>()
+				.Where(i => i.Id == itemId)
+				.TransformUsing(new DistinctRootEntityResultTransformer()).SingleOrDefaultAsync<Item>();
+			Event @event = await s.QueryOver<Event>()
+				.Where(i => i.Id == eventId)
+				.TransformUsing(new DistinctRootEntityResultTransformer()).SingleOrDefaultAsync<Event>();
+
+			UsedItem ui = new() {
+				Item = item,
+				Event = @event,
+				State = State.Unset
+			};
+
+			await s.SaveOrUpdateAsync(ui);
+			await trans.CommitAsync();
 		}
 
 		internal async Task DeleteEventById(int eventID) {
@@ -78,6 +113,18 @@ namespace InventoryManager {
 			return await query.SingleOrDefaultAsync<Event>();
 		}
 
+		internal async Task<UsedItem> GetUsedItemByItemID(int itemId, int eventId) {
+			using var session = sf.OpenSession();
+			UsedItem query = await session.QueryOver<UsedItem>()
+				.Where(i => (i.Item.Id == itemId) && (i.Event.Id == eventId))
+				.TransformUsing(new DistinctRootEntityResultTransformer()).SingleOrDefaultAsync<UsedItem>();
+			if(query != null) return query;
+			else {
+				await CreateNewUsedItem(itemId, eventId);
+				return await GetUsedItemByItemID(itemId,eventId);
+			}
+		}
+
 		internal async Task<IList<Event>> ListEvents() {
 			using (ISession s = sf.OpenSession()) {
 				return await s.QueryOver<Event>().ListAsync();
@@ -88,6 +135,13 @@ namespace InventoryManager {
 			using (ISession s = sf.OpenSession()) {
 				return await s.QueryOver<Item>().ListAsync();
 			};
+		}
+
+		internal async Task<IList<UsedItem>> ListUsedItemsForEvent(int eventId) {
+			using var session = sf.OpenSession();
+			return await session.QueryOver<UsedItem>()
+				.Where(i => i.Event.Id == eventId)
+				.TransformUsing(new DistinctRootEntityResultTransformer()).ListAsync<UsedItem>();
 		}
 
 		internal async Task SaveOrUpdateEvent(Event @event) {
