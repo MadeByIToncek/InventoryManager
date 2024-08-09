@@ -18,11 +18,8 @@ namespace InventoryManager.gui {
 			InitializeComponent();
 
 			dataGridView1.CellEndEdit += async (o, e) => {
-				try {
-					await Program.db.UpdateItemById((int)dataGridView1.Rows[e.RowIndex].Cells[0].Value, (string)dataGridView1.Rows[e.RowIndex].Cells[1].Value, Guid.Parse((string)dataGridView1.Rows[e.RowIndex].Cells[2].Value));
-					await UpdateList();
-				} catch (Exception) {
-				}
+				await Program.db.UpdateItemById((int)dataGridView1.Rows[e.RowIndex].Cells[0].Value, (string)dataGridView1.Rows[e.RowIndex].Cells[1].Value, (Guid)dataGridView1.Rows[e.RowIndex].Cells[2].Value);
+				await UpdateList();
 			};
 
 			dataGridView1.UserDeletingRow += async (o, e) => {
