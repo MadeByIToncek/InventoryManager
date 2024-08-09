@@ -51,10 +51,15 @@ namespace InventoryManager.gui {
 						DataGridViewCell cell = dataGridView1.SelectedCells[0];
 						if (cell != null) {
 							SetCell(cell.RowIndex, cell.ColumnIndex, request.content);
-							await Program.db.UpdateItemById((int)dataGridView1.Rows[cell.RowIndex].Cells[0].Value, (string)dataGridView1.Rows[cell.RowIndex].Cells[1].Value, Guid.Parse((string)dataGridView1.Rows[cell.RowIndex].Cells[2].Value));
+							try {
+								await Program.db.UpdateItemById((int)dataGridView1.Rows[cell.RowIndex].Cells[0].Value, (string)dataGridView1.Rows[cell.RowIndex].Cells[1].Value, Guid.Parse((string)dataGridView1.Rows[cell.RowIndex].Cells[2].Value));
+							} catch (Exception) {
+								return await Task.FromResult(false);
+							}
 							await UpdateListSafe();
 						}
 					}
+					return await Task.FromResult(true);
 				});
 				Enabled = true;
 			};
@@ -77,7 +82,7 @@ namespace InventoryManager.gui {
 		public async Task UpdateList() {
 			Enabled = false;
 			dataGridView1.Rows.Clear();
-			foreach (var item in await Program.db.ListItem()) {
+			foreach (var item in (await Program.db.ListItem()).OrderBy(x=>x.Id)){
 				dataGridView1.Rows.Add(item.Id, item.Name, item.Code);
 			}
 			Enabled = true;

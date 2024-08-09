@@ -51,7 +51,7 @@ namespace InventoryManager.gui {
 			//	DrawVerticalLine(ev, ((21 / 4.0f) * (i + 1)) / 21);
 			//}
 
-			for (int i = ((int)offsetNO.Value); i < ((int)labelNO.Value); i++) {
+			for (int i = ((int)offsetNO.Value); i < ((int)(labelNO.Value + offsetNO.Value)); i++) {
 				string val = Guid.NewGuid().ToString();
 				ZXing.Common.BitMatrix matrix = ZXing.Aztec.Internal.Encoder.encode(val).Matrix;
 

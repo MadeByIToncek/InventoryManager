@@ -6,7 +6,7 @@ namespace InventoryManager {
 	public partial class ScannerServer {
 		WebApplication server;
 
-		public ScannerServer(Action<BinaryEyeResponse> callback) {
+		public ScannerServer(Func<BinaryEyeResponse, Task<bool>> callback) {
 			server = WebApplication.Create();
 			server.Urls.Add("http://0.0.0.0:5000");
 			server.MapPost("/", handler => {
@@ -14,7 +14,10 @@ namespace InventoryManager {
 					// Do something with the value
 					string value = reader.ReadToEndAsync().Result;
 					BinaryEyeResponse? weatherForecast = JsonSerializer.Deserialize<BinaryEyeResponse>(value);
-					callback.Invoke(weatherForecast);
+					if(!callback.Invoke(weatherForecast).Result) {
+						handler.Response.StatusCode = 500;
+						return handler.Response.WriteAsync("NOT OK!");
+					};
 				}
 				return handler.Response.WriteAsync("ok!");
 			});

@@ -23,9 +23,15 @@ namespace InventoryManager.gui {
 			Shown += async (e, a) => {
 				Enabled = false;
 				server = new(async request => {
-					await Program.db.ChangeUsedItemStateById(eventID, Guid.Parse(request.content),DetermineStateForChanging());
+					try {
+						await Program.db.ChangeUsedItemStateById(eventID, Guid.Parse(request.content), DetermineStateForChanging());
+					} catch (Exception) {
+						return await Task.FromResult(false);
+					}
 					await UpdateItemListSafe();
+					return await Task.FromResult(true);
 				});
+				await CreateMissingUsedItems();
 				await UpdateItemList();
 				Enabled = true;
 			};
@@ -42,6 +48,13 @@ namespace InventoryManager.gui {
 				}
 			};
 		}
+
+		private async Task CreateMissingUsedItems() {
+            foreach (var item in await Program.db.ListItem())
+            {
+				await Program.db.GetUsedItemByItemID(item.Id, eventID);
+            }
+        }
 
 		private State DetermineStateForChanging() {
 			if (isCheckIn) {
@@ -67,11 +80,11 @@ namespace InventoryManager.gui {
 
 		private async Task UpdateItemList() {
 			dataGridView1.Rows.Clear();
-			foreach (var item in await Program.db.ListItem()) {
-				UsedItem ui = await Program.db.GetUsedItemByItemID(item.Id, eventID);
-				int id = dataGridView1.Rows.Add(item.Code, item.Name, ui.State);
-				dataGridView1.Rows[id].DefaultCellStyle.BackColor = StateHelper.Background(ui.State, isCheckIn);
-				dataGridView1.Rows[id].DefaultCellStyle.ForeColor = StateHelper.Foreground(ui.State);
+			foreach (var item in await Program.db.ListUsedItemsForEvent(eventID)) {
+				if (item.State == State.Unset) continue;
+				int id = dataGridView1.Rows.Add(item.Item.Code, item.Item.Name, item.State);
+				dataGridView1.Rows[id].DefaultCellStyle.BackColor = StateHelper.Background(item.State, isCheckIn);
+				dataGridView1.Rows[id].DefaultCellStyle.ForeColor = StateHelper.Foreground(item.State);
 			}
 		}
 
